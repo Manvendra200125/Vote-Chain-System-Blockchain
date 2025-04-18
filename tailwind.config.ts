@@ -61,6 +61,28 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// VoteChain custom colors
+				"vote-blue": {
+					DEFAULT: "#4361EE",
+					light: "#4CC9F0",
+					dark: "#3A0CA3",
+				},
+				"vote-purple": {
+					DEFAULT: "#7209B7",
+					light: "#9D4EDD",
+					dark: "#560BAD",
+				},
+				"vote-gradient": {
+					start: "#4361EE",
+					mid: "#7209B7",
+					end: "#3A0CA3",
+				},
+				"blockchain": {
+					DEFAULT: "#3A0CA3",
+					light: "#7209B7",
+					dark: "#240046",
+					accent: "#F72585",
 				}
 			},
 			borderRadius: {

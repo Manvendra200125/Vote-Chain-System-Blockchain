@@ -13,16 +13,16 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 222.2 47.4% 11.2%;
+    --primary: 240 100% 60%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 267 83% 38%;
+    --secondary-foreground: 210 40% 98%;
 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 210 40% 96.1%;
+    --accent: 191 92% 62%;
     --accent-foreground: 222.2 47.4% 11.2%;
 
     --destructive: 0 84.2% 60.2%;
@@ -30,7 +30,7 @@
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --ring: 267 83% 38%;
 
     --radius: 0.5rem;
 
@@ -98,4 +98,61 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 0.8;
+    box-shadow: 0 0 10px rgba(67, 97, 238, 0.5);
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 20px rgba(67, 97, 238, 0.8);
+  }
+}
+
+@keyframes blockchain-flow {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.blockchain-node {
+  animation: pulse-glow 2s infinite;
+}
+
+.blockchain-transaction {
+  animation: blockchain-flow 3s linear infinite;
+}
+
+.float-card {
+  animation: float 6s ease-in-out infinite;
+}
+
+.bg-vote-gradient {
+  background: linear-gradient(135deg, #4361EE 0%, #7209B7 50%, #3A0CA3 100%);
+}
+
+.bg-vote-gradient-hover:hover {
+  background: linear-gradient(135deg, #3A0CA3 0%, #7209B7 50%, #4361EE 100%);
+}
+
+.text-vote-gradient {
+  background: linear-gradient(90deg, #4361EE 0%, #7209B7 50%, #F72585 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
 }
