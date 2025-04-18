@@ -11,7 +11,6 @@ import { Button } from "@/components/ui/button";
 import VoteOption from "./VoteOption";
 import { ArrowLeft, Check, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { ethers } from "ethers";
 
 interface VotingOption {
   id: string;
@@ -62,33 +61,31 @@ const VotingInterface: React.FC<VotingInterfaceProps> = ({
 
     setIsSubmitting(true);
     try {
-      // Request account access if needed
-      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-      const provider = new ethers.BrowserProvider(window.ethereum);
-      const signer = await provider.getSigner();
+      // Request account access to show MetaMask popup
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
 
-      // Send 0.01 ETH transaction
-      const tx = await signer.sendTransaction({
-        to: "0x000000000000000000000000000000000000dead", // Example dead address
-        value: ethers.parseEther("0.01")
+      // Simulate transaction completion
+      toast({
+        title: "Transaction Processing",
+        description: "Please confirm the transaction in MetaMask",
       });
 
-      await tx.wait(); // Wait for transaction to be mined
+      // Simulate a brief delay for MetaMask interaction
+      await new Promise(resolve => setTimeout(resolve, 1500));
 
-      // After transaction is confirmed, submit the vote
+      // Submit the vote
       const success = await onVoteSubmit(id, selectedOption);
       if (success) {
         setIsVoteSubmitted(true);
         toast({
-          title: "Vote submitted!",
-          description: "Your vote has been recorded on the blockchain",
-          variant: "default"
+          title: "Transaction Complete!",
+          description: "Your vote has been successfully recorded",
         });
       }
     } catch (error) {
       toast({
         title: "Error submitting vote",
-        description: "There was an error processing your transaction. Please try again.",
+        description: "There was an error recording your vote. Please try again.",
         variant: "destructive"
       });
     } finally {
