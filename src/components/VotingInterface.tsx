@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { 
   Card, 
@@ -12,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import VoteOption from "./VoteOption";
 import { ArrowLeft, Check, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { ethers } from "ethers";
 
 interface VotingOption {
   id: string;
@@ -51,8 +51,31 @@ const VotingInterface: React.FC<VotingInterfaceProps> = ({
       return;
     }
 
+    if (typeof window.ethereum === 'undefined') {
+      toast({
+        title: "MetaMask not found",
+        description: "Please install MetaMask to submit your vote",
+        variant: "destructive"
+      });
+      return;
+    }
+
     setIsSubmitting(true);
     try {
+      // Request account access if needed
+      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+
+      // Send 0.01 ETH transaction
+      const tx = await signer.sendTransaction({
+        to: "0x000000000000000000000000000000000000dead", // Example dead address
+        value: ethers.parseEther("0.01")
+      });
+
+      await tx.wait(); // Wait for transaction to be mined
+
+      // After transaction is confirmed, submit the vote
       const success = await onVoteSubmit(id, selectedOption);
       if (success) {
         setIsVoteSubmitted(true);
@@ -65,7 +88,7 @@ const VotingInterface: React.FC<VotingInterfaceProps> = ({
     } catch (error) {
       toast({
         title: "Error submitting vote",
-        description: "There was an error recording your vote. Please try again.",
+        description: "There was an error processing your transaction. Please try again.",
         variant: "destructive"
       });
     } finally {

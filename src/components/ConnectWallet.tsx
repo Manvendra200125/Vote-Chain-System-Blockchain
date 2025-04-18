@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Wallet, ChevronDown, LogOut, Copy, ExternalLink } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { ethers } from "ethers";
 
 interface ConnectWalletProps {
   className?: string;
@@ -21,18 +22,32 @@ const ConnectWallet: React.FC<ConnectWalletProps> = ({ className }) => {
   const [walletAddress, setWalletAddress] = useState("");
   const { toast } = useToast();
 
-  const connectWallet = () => {
-    // In a real app, this would use Web3 providers like ethers.js
-    // For demo purposes, we'll simulate a connection
-    setTimeout(() => {
-      const mockAddress = "0x71C7656EC7ab88b098defB751B7401B5f6d8976F";
-      setWalletAddress(mockAddress);
+  const connectWallet = async () => {
+    if (typeof window.ethereum === 'undefined') {
+      toast({
+        title: "MetaMask not found",
+        description: "Please install MetaMask to connect your wallet",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      // Request account access
+      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      setWalletAddress(accounts[0]);
       setIsConnected(true);
       toast({
         title: "Wallet connected",
-        description: "Your wallet has been successfully connected",
+        description: "Your MetaMask wallet has been successfully connected",
       });
-    }, 1000);
+    } catch (error) {
+      toast({
+        title: "Connection failed",
+        description: "Failed to connect to MetaMask",
+        variant: "destructive"
+      });
+    }
   };
 
   const disconnectWallet = () => {
@@ -68,7 +83,7 @@ const ConnectWallet: React.FC<ConnectWalletProps> = ({ className }) => {
         onClick={connectWallet}
       >
         <Wallet className="h-4 w-4 mr-2" />
-        <span className="hidden md:inline">Connect Wallet</span>
+        <span className="hidden md:inline">Connect MetaMask</span>
         <span className="inline md:hidden">Connect</span>
       </Button>
     );
